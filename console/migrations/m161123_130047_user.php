@@ -14,13 +14,12 @@ class m161123_130047_user extends Migration
             'name'=>$this->string(50),
             'lastname'=>$this->string(50),
             'email'=>$this->string(100),
-            'phone'=>$this->string(13),
+            'phone'=>$this->string(20),
             'password'=>$this->string(64),
             'isActive'=> $this->integer(4)->notNull()->defaultValue(1),
-            'lastLoginAt'=> $this->datetime(),
-            'updatedAt'=> $this->datetime(),
-            'createdAt'=> $this->datetime()
-            
+            'lastLoginAt'=>$this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
+            'updatedAt'=>  $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
+            'createdAt'=>  $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')          
 
             ]);
     }
