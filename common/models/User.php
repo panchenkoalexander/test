@@ -4,7 +4,9 @@ namespace common\models;
 
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-
+const ROLE_USER = 1;
+const ROLE_MODER = 5;
+const ROLE_ADMIN = 10;
 class User extends ActiveRecord implements IdentityInterface
 {
     public function setPassword($password)
@@ -25,14 +27,23 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
 
-    public static function findIdentityByAccessToken($token, $type = null){}
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return static::findOne(['access_token' => $token]);
+    }
 
 
 
 
 
-    public function getAuthKey(){}
+    public function getAuthKey()
+    {
+        return $this->auth_key;
+    }
 
 
-    public function validateAuthKey($authKey){}
+    public function validateAuthKey($authKey)
+    {
+        return $this->getAuthKey() === $authKey;
+    }
 }

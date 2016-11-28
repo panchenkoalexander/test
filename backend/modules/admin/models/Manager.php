@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\admin\models;
+namespace backend\modules\admin\models;
 
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -70,7 +70,7 @@ class Manager extends ActiveRecord implements IdentityInterface
     }
     public function validatePassword($password)
     {
-        return $this->password === md5($password);
+        return $this->password === $password;
     }
     public static function findIdentity($id)
     {

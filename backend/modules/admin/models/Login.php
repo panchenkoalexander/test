@@ -1,9 +1,9 @@
 <?php
 
-namespace app\modules\admin\models\Login;
+namespace app\modules\admin\models;
 
 use yii\base\Model;
-use app\modules\admin\models\Manager;
+use backend\modules\admin\models\Manager;
 
 class Login extends Model
 {
@@ -23,7 +23,7 @@ class Login extends Model
     {
         if(!$this->hasErrors())
         {
-            $user = $this->getUser();
+            $user = $this->getManager();
             if(!$user || !$user->validatePassword($this->password))
             {
                 $this->addError($attribute,'Пароль или пользователь введены не верно');
@@ -31,7 +31,7 @@ class Login extends Model
         }
     }
 
-    public function getUser()
+    public function getManager()
     {
         return Manager::findOne(['email'=>$this->email]);
     }

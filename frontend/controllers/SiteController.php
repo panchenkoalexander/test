@@ -12,6 +12,7 @@ use yii\web\Controller;
 use app\models\Signup;
 use app\models\Login;
 use common\models\EntryForm;
+use yii\filters\AccessControl;
 
 /**
  * Site controller
@@ -21,13 +22,38 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['login', 'logout', 'signup'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['login', 'signup'],
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['logout'],
+                        'roles' => ['@'],
+                    ],
+
+                ],
+            ],
+        ];
+        /*return [
+
             [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'entry_date',
                 'updatedAtAttribute' => false,
                 'value' => new Expression('NOW()'),
             ],
-        ];
+
+        ];*/
+    }
+    public function  actionProfile()
+    {
+        return $this->render('profile');
     }
     public function  actionIndex()
     {

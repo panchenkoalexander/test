@@ -2,13 +2,16 @@
 
 namespace app\modules\admin\controllers;
 
+
+
 use Yii;
-use app\modules\admin\models\Manager;
+use app\modules\admin\models\Login;
+use backend\modules\admin\models\Manager;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\models\Login;
+
 
 
 /**
@@ -138,11 +141,21 @@ class ManagerController extends Controller
             $login_model->attributes=Yii::$app->request->post('Login');
             if($login_model->validate())
             {
-                Yii::$app->user->login($login_model->getUser());
-                return $this->redirect('login');
+                Yii::$app->user->login($login_model->getManager());
+                return $this->redirect('index.php?r=admin/manager');
             }
         }
 
         return $this->render('login',['login_model'=>$login_model]);
+    }
+
+    public function actionLogout()
+    {
+        if(!Yii::$app->user->isGuest)
+        {
+            Yii::$app->user->logout();
+            return $this->redirect(['r=admin/manager/login']);
+        }
+
     }
 }
