@@ -9,6 +9,7 @@ use app\modules\admin\models\Login;
 use backend\modules\admin\models\Manager;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -68,15 +69,22 @@ class ManagerController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Manager();
+        if(Yii::$app->user->can( 'create-manager' ) )
+        {
+            $model = new Manager();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
+        }else
+        {
+            throw new ForbiddenHttpException('У вас недостаточно прав для выполнения указанного действия');
         }
+
     }
 
     /**
@@ -87,14 +95,19 @@ class ManagerController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if(Yii::$app->user->can( 'update-manager' ) ) {
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
+        }else
+        {
+            throw new ForbiddenHttpException('У вас недостаточно прав для выполнения указанного действия');
         }
     }
 
